@@ -6,3 +6,4 @@ RSS aggregator for multiple feeds.
 
 - Golang
 - chi
+- godotenv
