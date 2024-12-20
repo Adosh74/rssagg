@@ -36,6 +36,12 @@ func main() {
 		log.Fatal("Port not found in the environment")
 	}
 
+	appName := os.Getenv("APP_NAME")
+
+	if appName == "" {
+		log.Fatal("App name not found in the environment")
+	}
+
 	conn, err := sql.Open("postgres", dbUrl)
 
 	if err != nil {
