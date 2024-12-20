@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 )
 
 func responseWithError(w http.ResponseWriter, code int, msg string) {
@@ -21,7 +22,15 @@ func responseWithError(w http.ResponseWriter, code int, msg string) {
 }
 
 func responseWithJson(w http.ResponseWriter, code int, payload interface{}) {
-	dat, err := json.Marshal(payload)
+	appName := os.Getenv("APP_NAME")
+
+	dat, err := json.Marshal(struct {
+		App  string      `json:"app"`
+		Data interface{} `json:"data"`
+	}{
+		App:  appName,
+		Data: payload,
+	})
 
 	if err != nil {
 		log.Printf("Fail to marshal json response %v", payload)
