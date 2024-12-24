@@ -68,10 +68,23 @@ func scrapeFeed(db *database.Queries, wg *sync.WaitGroup, feed database.Feed) {
 			description.Valid = true
 		}
 
-		pubAt, err := time.Parse(time.RFC1123Z, item.PubDate)
+		var pubAt time.Time
+		var err error
+		dateFormats := []string{
+			time.RFC1123Z,
+			time.RFC1123,
+			time.RFC3339,
+			time.RFC3339Nano,
+		}
+
+		for _, format := range dateFormats {
+			pubAt, err = time.Parse(format, item.PubDate)
+			if err == nil {
+				break
+			}
+		}
 
 		if err != nil {
-
 			log.Printf("error parsing date %v with err %v", item.PubDate, err)
 			continue
 		}
